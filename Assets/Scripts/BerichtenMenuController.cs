@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Cloud.Analytics;
 
 public class BerichtenMenuController : MonoBehaviour
 {
@@ -33,10 +32,6 @@ public class BerichtenMenuController : MonoBehaviour
     private static string done = "Afronden";
 
     private string categoryLabelText;
-
-    // ANALYTICS
-    private float analyticsTimeStart = 0f;
-    private bool analyticsTimeStarted = false;
 
     private string[] baseWord = new string[12] {
         "***",
@@ -239,12 +234,6 @@ public class BerichtenMenuController : MonoBehaviour
     {
         if (berichtMakerActive == true)
         {
-            if (!analyticsTimeStarted)
-            {
-                analyticsTimeStart = Time.realtimeSinceStartup;
-                analyticsTimeStarted = true;
-            }
-
             //buttonRect.width = this.gameObject.GetComponent<RectTransform>().rect.width;
             buttonRect.x = (Screen.width / 2) - (buttonRect.width / 2);
             buttonRect.y = (Screen.height / 2) - (buttonRect.height / 2) - 50f;
@@ -583,9 +572,6 @@ public class BerichtenMenuController : MonoBehaviour
 
     public void ExitMessageMenu()
     {
-        StartGameAnalytics();
-        analyticsTimeStarted = false;
-
         wordOptions = baseWord;
         messageList = new string[8];
         stage = 0;
@@ -611,28 +597,5 @@ public class BerichtenMenuController : MonoBehaviour
         string user = "Guest";
 
         StartCoroutine(berichtGetSet.submitMessage(key, user, selectedText));
-    }
-
-    /**
-     * Sends the selected player and level to analytics
-     */
-    void StartGameAnalytics()
-    {
-        float timeSpent = (Time.realtimeSinceStartup - analyticsTimeStart);
-        int messageKey = messagePrefab.GetComponent<BerichtController>().messageKey;
-        bool isWritten = messagePrefab.GetComponent<BerichtController>().isRewritten;
-
-        AnalyticsResult results = UnityAnalytics.CustomEvent("berichtMaker", new Dictionary<string, object>
-        {
-            { "selectedLevel", Application.loadedLevelName },
-            { "berichtID", messageKey },
-            { "timeSpentInBerichtMenu", timeSpent},
-            { "messagePlaced", isWritten },
-        });
-
-        if (results != AnalyticsResult.Ok)
-            Debug.LogError("Analytics berichtMaker: " + results.ToString());
-        else
-            Debug.Log("Analytics berichtMaker: Done");
     }
 }
