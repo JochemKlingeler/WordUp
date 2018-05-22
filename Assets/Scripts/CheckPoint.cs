@@ -20,7 +20,7 @@ public class CheckPoint : MonoBehaviour {
         message = message.Replace("\\n", "\n");
         gameMaster = FindObjectOfType<GameMaster>();
         player = FindObjectOfType<Player>();
-        messageObject = transform.FindChild("CheckpointMessage").gameObject;
+        messageObject = transform.Find("CheckpointMessage").gameObject;
     }
 
     void Update()

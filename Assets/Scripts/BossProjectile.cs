@@ -15,7 +15,7 @@ public class BossProjectile : MonoBehaviour {
         if (collided.collider.gameObject.tag == "Player")
         {
             Instantiate(enemyDeathEffect, collided.transform.position, collided.transform.rotation);
-            Transform stats = collided.gameObject.transform.FindChild("Stats");
+            Transform stats = collided.gameObject.transform.Find("Stats");
             if (stats != null)
             {
                 Player playerComponent = stats.GetComponent<Player>();
@@ -36,7 +36,7 @@ public class BossProjectile : MonoBehaviour {
         if (collided.collider.gameObject.tag == "Player")
         {
             Instantiate(enemyDeathEffect, collided.transform.position, collided.transform.rotation);
-            Transform stats = collided.gameObject.transform.FindChild("Stats");
+            Transform stats = collided.gameObject.transform.Find("Stats");
             if (stats != null)
             {
                 Player playerComponent = stats.GetComponent<Player>();

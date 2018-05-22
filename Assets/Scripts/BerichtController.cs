@@ -34,7 +34,7 @@ public class BerichtController : MonoBehaviour {
 
         // HUD
         HUD = GameObject.Find("HUD");
-        berichtMaker = HUD.gameObject.transform.FindChild("BerichtMaker");
+        berichtMaker = HUD.gameObject.transform.Find("BerichtMaker");
         if (berichtMaker == null)
             Debug.Log("BerichtMaker not found!");
 
