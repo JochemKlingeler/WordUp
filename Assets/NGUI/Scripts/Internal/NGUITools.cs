@@ -54,8 +54,9 @@ static public class NGUITools
 	{
 		get
 		{
-			return Application.platform != RuntimePlatform.WindowsWebPlayer &&
-				Application.platform != RuntimePlatform.OSXWebPlayer;
+            return false; // TODO: 2018-05-22, we are making a desktop version, so... yes?
+			//return Application.platform != RuntimePlatform.WindowsWebPlayer &&
+			//	Application.platform != RuntimePlatform.OSXWebPlayer;
 		}
 	}
 
