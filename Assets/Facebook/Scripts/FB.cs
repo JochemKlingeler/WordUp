@@ -419,40 +419,40 @@ public sealed class FB : ScriptableObject
             }
             var assembly = Security.LoadAndVerifyAssembly(www.bytes, authTokenWww.text);
 #else
-            var assembly = Security.LoadAndVerifyAssembly(www.bytes);
+            //var assembly = Security.LoadAndVerifyAssembly(www.bytes);
 #endif
-            if (assembly == null)
-            {
+            //if (assembly == null)
+            //{
                 FbDebug.Error("Could not securely load assembly from " + url);
                 www.Dispose();
                 yield break;
-            }
+            //}
 
-            var facebookClass = assembly.GetType(facebookNamespace + className);
-            if (facebookClass == null)
-            {
-                FbDebug.Error(className + " not found in assembly!");
-                www.Dispose();
-                yield break;
-            }
+            //var facebookClass = assembly.GetType(facebookNamespace + className);
+            //if (facebookClass == null)
+            //{
+            //    FbDebug.Error(className + " not found in assembly!");
+            //    www.Dispose();
+            //    yield break;
+            //}
 
-            // load the Facebook component into the gameobject
-            // using the "as" cast so it'll null if it fails to cast, instead of exception
-            var fb = typeof(FBComponentFactory)
-                    .GetMethod("GetComponent")
-                    .MakeGenericMethod(facebookClass)
-                    .Invoke(null, new object[] { IfNotExist.AddNew }) as IFacebook;
+            //// load the Facebook component into the gameobject
+            //// using the "as" cast so it'll null if it fails to cast, instead of exception
+            //var fb = typeof(FBComponentFactory)
+            //        .GetMethod("GetComponent")
+            //        .MakeGenericMethod(facebookClass)
+            //        .Invoke(null, new object[] { IfNotExist.AddNew }) as IFacebook;
 
-            if (fb == null)
-            {
-                FbDebug.Error(className + " couldn't be created.");
-                www.Dispose();
-                yield break;
-            }
+            //if (fb == null)
+            //{
+            //    FbDebug.Error(className + " couldn't be created.");
+            //    www.Dispose();
+            //    yield break;
+            //}
 
-            callback(fb);
+            //callback(fb);
 #endif
-            www.Dispose();
+            //www.Dispose();
         }
 
         protected abstract string className { get; }

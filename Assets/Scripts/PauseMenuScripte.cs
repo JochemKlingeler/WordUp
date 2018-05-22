@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Cloud.Analytics;
 
 public class PauseMenuScripte : MonoBehaviour {
 
@@ -16,11 +15,6 @@ public class PauseMenuScripte : MonoBehaviour {
 
     private Text kindTextHUD;
     private int maxKids;
-
-    // Analytics
-    private bool pauseStarted = false;
-    private float pauseStartTime;
-    private bool pauseContinue;
 
 	// Use this for initialization
 	void Start () 
@@ -40,12 +34,6 @@ public class PauseMenuScripte : MonoBehaviour {
         // Pauzemenu
         if (PauseActive == true)
         {
-            if (!pauseStarted)
-            {
-                pauseStartTime = Time.realtimeSinceStartup;
-                pauseStarted = true;
-            }
-
             button1Rect.y = button1Rect.y + 65;
             button2Rect.y = button2Rect.y + 135;
             // Activeer Ingame menu
@@ -64,10 +52,6 @@ public class PauseMenuScripte : MonoBehaviour {
                 "OK"
                 ))
             {
-                pauseContinue = true;
-                pauseStarted = false;
-                StartGameAnalytics();
-
                 PauseActive = false;
                 Time.timeScale = 1;
                 pauzeMenu.gameObject.SetActive(false);
@@ -80,37 +64,11 @@ public class PauseMenuScripte : MonoBehaviour {
                 "Menu"
                 ))
             {
-                pauseContinue = false;
-                pauseStarted = false;
-                StartGameAnalytics();
-
                 PauseActive = false;
                 Time.timeScale = 1;
                 pauzeMenu.gameObject.SetActive(false);
                 Application.LoadLevel("MainMenu");
             }
-        }                
-    }
-
-    /**
-     * Sends the selected player and level to analytics
-     */
-    void StartGameAnalytics()
-    {
-        float timeSpent = (Time.realtimeSinceStartup - pauseStartTime);
-        GameControl.control.pauseDuration += timeSpent;
-
-        AnalyticsResult results = UnityAnalytics.CustomEvent("pauseMenu", new Dictionary<string, object>
-        {
-            { "selectedLevel", Application.loadedLevelName },
-            { "runningTime", Time.timeSinceLevelLoad },
-            { "timeSpentInPauseMenu", timeSpent },
-            { "continueAfterPauseMenu", pauseContinue },
-        });
-
-        if (results != AnalyticsResult.Ok)
-            Debug.LogError("Analytics pauseMenu: " + results.ToString());
-        else
-            Debug.Log("Analytics pauseMenu: Done");
+        }
     }
 }

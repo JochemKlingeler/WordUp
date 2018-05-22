@@ -137,8 +137,8 @@ public class BossController : MonoBehaviour
         bossSequenceList = new BetterList<bossEvents>();
 
         HUD = GameObject.Find("HUD");
-        BossBar = HUD.transform.FindChild("BossHud").gameObject;
-        BossFill = BossBar.transform.FindChild("BossFill").gameObject;
+        BossBar = HUD.transform.Find("BossHud").gameObject;
+        BossFill = BossBar.transform.Find("BossFill").gameObject;
 
         switch (currentSequence)
         {

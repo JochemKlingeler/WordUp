@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Cloud.Analytics;
 
 public class GameOverScript : MonoBehaviour
 {
@@ -14,9 +13,6 @@ public class GameOverScript : MonoBehaviour
 	private Rect button2Rect = new Rect(15,15,160,30);	
 
     public string herstartlevel;
-
-    // ANALYTICS
-    private bool restartAfterGameOver;
 
 	void Start()
 	{
@@ -56,9 +52,6 @@ public class GameOverScript : MonoBehaviour
 				"Opnieuw?"
 				)) 
 			{
-                restartAfterGameOver = true;
-                StartGameAnalytics();
-
 				GameOverActive = false;
 				gameoverMenu.gameObject.SetActive(false);
 				Time.timeScale = 1;
@@ -72,75 +65,11 @@ public class GameOverScript : MonoBehaviour
 				"Menu"
 				)) 
 			{
-                restartAfterGameOver = true;
-                StartGameAnalytics();
-
 				GameOverActive = false;
 				gameoverMenu.gameObject.SetActive(false);
 				Time.timeScale = 1;
 				Application.LoadLevel ("MainMenu"); // Load Main Menu
 			}
-		}		
+		}
 	}
-
-    /**
-     * Sends the selected player and level to analytics
-     */
-    void StartGameAnalytics()
-    {
-        string customEventName = "PlayerDeath" + Application.loadedLevelName;
-        AnalyticsResult results;
-
-        if (!GameControl.control.bossBattleStarted)
-        {
-            results = UnityAnalytics.CustomEvent(customEventName, new Dictionary<string, object>
-            {
-                { "runningTime", Time.timeSinceLevelLoad },
-                { "kidsFound", GameControl.control.kidsFound },
-                { "lettersFound", GameControl.control.lettersFound },
-                { "enemyDefeated", GameControl.control.enemiesDefeated },
-                { "respawns", GameControl.control.respawns },
-                { "timesPaused", GameControl.control.timesPaused },
-                { "pauseDuration", GameControl.control.pauseDuration },
-                { "restartAfterGameOver", restartAfterGameOver },
-            });
-        }
-        else
-        {
-            float bossBattleDuration = (Time.timeSinceLevelLoad - GameControl.control.bossBattleStartTime);
-            customEventName += "Boss";
-            results = UnityAnalytics.CustomEvent(customEventName, new Dictionary<string, object>
-            {
-                { "runningTime", Time.timeSinceLevelLoad },
-                { "kidsFound", GameControl.control.kidsFound },
-                { "enemyDefeated", GameControl.control.enemiesDefeated },
-                { "respawns", GameControl.control.respawns },
-                { "bossBattleHealth", GameControl.control.bossDamageTaken },
-                { "bossBattleDuration", bossBattleDuration },
-                { "timesPaused", GameControl.control.timesPaused },
-                { "pauseDuration", GameControl.control.pauseDuration },
-                { "restartAfterGameOver", restartAfterGameOver },
-            });
-        }
-
-        if (results != AnalyticsResult.Ok)
-            Debug.LogError("Analytics " + customEventName + ": " + results.ToString());
-        else
-            Debug.Log("Analytics " + customEventName + ": Done");
-
-        // Shots
-        customEventName += "Shots";
-
-        AnalyticsResult results2 = UnityAnalytics.CustomEvent(customEventName, new Dictionary<string, object>
-        {
-            { "projectile1Shot", GameControl.control.projectile1Shot },
-            { "projectile2Shot", GameControl.control.projectile2Shot },
-            { "projectile3Shot", GameControl.control.projectile3Shot },
-        });
-
-        if (results2 != AnalyticsResult.Ok)
-            Debug.LogError("Analytics " + customEventName + ": " + results.ToString());
-        else
-            Debug.Log("Analytics " + customEventName + ": Done");
-    }
 }
